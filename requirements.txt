@@ -1,0 +1,10 @@
+numpy
+torch>=1.1.0
+torchvision>=0.3.0
+math
+pickle
+logging
+Pillow
+shutil
+tqdm==4.65.0
+scikit-learn==1.2.2
