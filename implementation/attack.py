@@ -83,8 +83,7 @@ def get_args_parser():
                         help='What to do?')
     parser.add_argument('-source_layer', '--source_layer', type=str, default='layer3_2')
     parser.add_argument('-cosine', '--cosine', type=float, default=3)
-    parser.add_argument('-lamda', '--lamda', type=float, default=1,
-                        help='Path of pretrained model to be adversarially attacked')
+    parser.add_argument('-lamda', '--lamda', type=float, default=1)
 
     return parser
 
@@ -189,6 +188,7 @@ def main(args):
         model_ = args.source_model.split('_')
     elif args.mode == 'test':
         model_ = args.model.split('_')
+
 
     model = get_segmentation_model(model=model_[0], dataset=args.pretrained_data, backbone=model_[1],
                                     pretrained=args.pretrained, root=args.pt).to(args.device)

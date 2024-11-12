@@ -51,8 +51,8 @@ Generate adversarial examples from the proposed attack method and evaluate trans
 
 ```
 cd implementation
-python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrained_data pascal_aug --pretrained False  --cosine 3 --source_model psp_resnet50 --target_model deeplabv3_resnet101
-# if you have pretrained model, you can change '--pretrained' True
+python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrained_data pascal_aug --cosine 3 --source_model psp_resnet50_voc --target_model deeplabv3_resnet101_voc
+# if you have pretrained model, you have to change '--pretrained' True(default False)
 ```
 or, you can use bash script [attack.sh](implementation/attack.sh)
 
