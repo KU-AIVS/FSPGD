@@ -32,10 +32,7 @@ class Trainer:
         between epochs or iterations as the training progresses.
     Attributes
     ----------
-    train_losses_ : torch.tensor
-        It is a log of train losses for each epoch step.
-    val_losses_ : torch.tensor
-        It is a log of validation losses for each epoch step.
+
     """
 
     def __init__(
@@ -95,8 +92,6 @@ class Trainer:
     def save_ckpt(self, epoch):
         torch.save({"epoch": epoch, "model_state_dict": self.model.state_dict(),
                     "optimizer_state_dict": self.optimizer.state_dict(),
-                    "train_loss": self.train_losses_,
-                    "val_loss": self.val_losses_,
                     "mIoU": self.mIoU},
                    self.model_save_path)
 
@@ -132,8 +127,6 @@ class Trainer:
         val_loader :
         """
         # attributes
-        self.train_losses_ = torch.zeros(self.epochs)
-        self.val_losses_ = torch.zeros(self.epochs)
         # ---- train process ----
         for epoch in trange(1, self.epochs + 1, desc='Traning Model on {} epochs'.format(self.epochs)):
             # train
@@ -343,7 +336,6 @@ class Trainer:
                             data_grad=images.grad,
                             orig_image=orig_image,
                             alpha=self.alpha,
-                            targeted=self.targeted,
                             clamp_min=clamp_min,
                             clamp_max=clamp_max,
                             grad_scale=None
@@ -355,7 +347,6 @@ class Trainer:
                             data_grad=images.grad,
                             orig_image=orig_image,
                             alpha=self.alpha,
-                            targeted=self.targeted,
                             clamp_min=clamp_min,
                             clamp_max=clamp_max,
                             grad_scale=None
@@ -403,9 +394,6 @@ class Trainer:
                                                preds.detach().max(dim=1)[1].cpu().numpy())
                     self.initial_metrics.update(orig_preds.detach().max(dim=1)[1].cpu().numpy(),
                                                 preds.detach().max(dim=1)[1].cpu().numpy())
-                self.val_losses_[epoch - 1] = loss.item()
-                evaluation.set_postfix(loss=loss.item())
-                losses[i] = loss.item()
 
     def _get_device(self, _device):
         if _device is None:

@@ -35,8 +35,8 @@ def get_args_parser():
     parser.add_argument('--seed', default=42, type=int)
 
     parser.add_argument('--model', type=str)
-    parser.add_argument('--source_model', type=str)
-    parser.add_argument('--target_model', type=str)
+    parser.add_argument('--source_model', type=str, default='psp_resnet50_voc')
+    parser.add_argument('--target_model', type=str, default='deeplabv3_resnet101_voc')
     parser.add_argument('--workers', '-j', type=int, default=0,
                         metavar='N', help='dataloader threads')
 
@@ -81,7 +81,7 @@ def get_args_parser():
 
     parser.add_argument('-m', '--mode', type=str, default='adv_attack', choices={'adv_attack', 'trans_test', 'test'},
                         help='What to do?')
-    parser.add_argument('-source_layer', '--source_layer', type=str, default=None)
+    parser.add_argument('-source_layer', '--source_layer', type=str, default='layer3_2')
     parser.add_argument('-cosine', '--cosine', type=float, default=3)
     parser.add_argument('-lamda', '--lamda', type=float, default=1,
                         help='Path of pretrained model to be adversarially attacked')
@@ -240,7 +240,7 @@ def main(args):
 
     model_ = args.target_model.split('_')
     model = get_segmentation_model(model=model_[0], dataset=args.pretrained_data, backbone=model_[1],
-                               pretrained=True, root=args.pt).to(args.device)
+                               pretrained=args.pretrained, root=args.pt).to(args.device)
 
     trainer.trans_test(val_loader, model=model, model_name=args.target_model)
 

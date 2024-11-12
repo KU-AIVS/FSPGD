@@ -14,8 +14,8 @@ _model_sha1 = {name: checksum for checksum, name in [
     ('0d43d698c66aceaa2bc0309f55efdd7ff4b143af', 'resnet152'),
 ]}
 
-encoding_repo_url = 'https://hangzh.s3.amazonaws.com/'
-_url_format = '{repo_url}encoding/models/{file_name}.zip'
+encoding_repo_url = 'https://github.com/LikeLy-Journey/SegmenTron/releases/download/v0.1.0'
+_url_format = '{repo_url}/{file_name}.pth'
 
 
 def short_hash(name):
@@ -24,7 +24,7 @@ def short_hash(name):
     return _model_sha1[name][:8]
 
 
-def get_resnet_file(name, root='~/.torch/models'):
+def get_resnet_file(name, root='./../../pretrained_model'):
     file_name = '{name}-{short_hash}'.format(name=name, short_hash=short_hash(name))
     root = os.path.expanduser(root)
 
@@ -42,16 +42,17 @@ def get_resnet_file(name, root='~/.torch/models'):
     if not os.path.exists(root):
         os.makedirs(root)
 
-    zip_file_path = os.path.join(root, file_name + '.zip')
+    zip_file_path = os.path.join(root, file_name + '.pth')
     repo_url = os.environ.get('ENCODING_REPO', encoding_repo_url)
     if repo_url[-1] != '/':
         repo_url = repo_url + '/'
     download(_url_format.format(repo_url=repo_url, file_name=file_name),
              path=zip_file_path,
              overwrite=True)
-    with zipfile.ZipFile(zip_file_path) as zf:
-        zf.extractall(root)
-    os.remove(zip_file_path)
+
+    # with zipfile.ZipFile(zip_file_path) as zf:
+    #     zf.extractall(root)
+    # os.remove(zip_file_path)
 
     if check_sha1(file_path, sha1_hash):
         return file_path

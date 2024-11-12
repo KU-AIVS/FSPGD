@@ -7,6 +7,84 @@ class Attack:
         pass
 
     @staticmethod
+    def step_inf(
+            perturbed_image,
+            epsilon,
+            data_grad,
+            orig_image,
+            alpha,
+            clamp_min=0,
+            clamp_max=1,
+            grad_scale=None
+    ):
+        sign_data_grad = alpha * data_grad.sign()
+        if grad_scale is not None:
+            sign_data_grad *= grad_scale
+        perturbed_image = perturbed_image.detach() + sign_data_grad
+        delta = perturbed_image - orig_image
+        delta = torch.permute(delta, (0, 2, 3, 1))
+        delta = torch.clamp(delta, min=-torch.tensor(epsilon).to(orig_image.device),
+                            max=torch.tensor(epsilon).to(orig_image.device))
+        delta = torch.permute(delta, (0, 3, 1, 2))
+
+        perturbed_image = orig_image + delta
+        perturbed_image = torch.permute(perturbed_image, (0, 2, 3, 1))
+        perturbed_image = torch.clamp(perturbed_image, torch.tensor(clamp_min).to(orig_image.device),
+                                      torch.tensor(clamp_max).to(orig_image.device)).detach()
+        perturbed_image = torch.permute(perturbed_image, (0, 3, 1, 2))
+
+        return perturbed_image
+
+
+    @staticmethod
+    def step_l2(
+            perturbed_image,
+            epsilon,
+            data_grad,
+            orig_image,
+            alpha,
+            clamp_min = 0,
+            clamp_max = 1,
+            grad_scale = None
+        ):
+
+        data_grad = Attack.lp_normalize(
+            data_grad,
+            p = 2,
+            epsilon = 1.0,
+            decrease_only = False
+        )
+        if grad_scale is not None:
+            data_grad *= grad_scale
+        # Create the perturbed image by adjusting each pixel of the input image
+        perturbed_image = perturbed_image.detach() + alpha*data_grad
+        # clip to l2 ball
+        delta = Attack.lp_normalize(
+            noise = perturbed_image - orig_image,
+            p = 2,
+            epsilon = epsilon,
+            decrease_only = True
+        )
+        # Adding clipping to maintain [0,1] range
+        perturbed_image = torch.clamp(orig_image + delta, clamp_min, clamp_max).detach()
+        return perturbed_image
+    @staticmethod
+    def lp_normalize(
+            noise,
+            p,
+            epsilon = None,
+            decrease_only = False
+        ):
+        if epsilon is None:
+            epsilon = torch.tensor(1.0)
+        denom = torch.norm(noise, p=p, dim=(-1, -2, -3))
+        denom = torch.maximum(denom, torch.tensor(1E-12)).unsqueeze(1).unsqueeze(1).unsqueeze(1)
+        if decrease_only:
+            denom = torch.maximum(denom/epsilon, torch.tensor(1))
+        else:
+            denom = denom / epsilon
+        return noise / denom
+    @staticmethod
     def init_linf(
             images,
             epsilon,
@@ -25,31 +103,23 @@ class Attack:
 
 
     @staticmethod
-    def step_inf(
-            perturbed_image,
+    def init_l2(
+            images,
             epsilon,
-            data_grad,
-            orig_image,
-            alpha,
             clamp_min = 0,
             clamp_max = 1,
-            grad_scale = None
         ):
-        sign_data_grad = alpha*data_grad.sign()
-        if grad_scale is not None:
-            sign_data_grad *= grad_scale
-        perturbed_image = perturbed_image.detach() + sign_data_grad
-        delta = perturbed_image - orig_image
-        delta = torch.permute(delta, (0, 2, 3, 1))
-        delta = torch.clamp(delta, min=-torch.tensor(epsilon).to(orig_image.device), max=torch.tensor(epsilon).to(orig_image.device))
-        delta = torch.permute(delta, (0, 3, 1, 2))
+        noise = torch.empty_like(images).uniform_(-1, 1).to(images.device) * epsilon
+        noise = Attack.lp_normalize(
+            noise = noise,
+            p = 2,
+            epsilon = epsilon,
+            decrease_only = False
+        )
+        images = images + noise
+        images = images.clamp(clamp_min, clamp_max)
+        return images
 
-        perturbed_image = orig_image + delta
-        perturbed_image = torch.permute(perturbed_image, (0, 2, 3, 1))
-        perturbed_image = torch.clamp(perturbed_image, torch.tensor(clamp_min).to(orig_image.device), torch.tensor(clamp_max).to(orig_image.device)).detach()
-        perturbed_image = torch.permute(perturbed_image, (0, 3, 1, 2))
-
-        return perturbed_image
 
     @staticmethod
     def fspgd(

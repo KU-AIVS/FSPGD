@@ -26,18 +26,20 @@ we trained models(pspnet-res50, pspnet-res101, deeplabv3-res50, deeplabv3-res101
 Download  'training/validation data' file from [Pascal VOC 2012](http://host.robots.ox.ac.uk/pascal/VOC/) and extract it to 'dataset/voc'.
 
 ```
-/dataset
+/datasets
     /voc
-        /pascal_voc
-            /SegmentationClass
+        /VOC2012
+            /Annotation
+            /ImageSets
             /JPEGImages
+            /SegmentationClass
             ...
 ```
 Download 'gtFine_trainvaltest.zip' and 'leftImg8bit_trainvaltest.zip' from [Cityscapes](https://www.cityscapes-dataset.com/) 
 and extract it to dataset/citys
 #### Cityscapes
 ```
-/dataset
+/datasets
     /citys 
         /gtFine
         /leftImg8bit
@@ -48,7 +50,8 @@ Generate adversarial examples from the proposed attack method and evaluate trans
 
 ```
 cd implementation
-python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrained_data pascal_aug  --cosine 3 --source_model psp_resnet50 --target_model deeplabv3_resnet101
+python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrained_data pascal_aug --pretrained True  --cosine 3 --source_model psp_resnet50 --target_model deeplabv3_resnet101
+# if you have pretrained model, you can change '--pretrrained' True
 ```
 or, you can use bash script [attack.sh](implementation/attack.sh)
 
