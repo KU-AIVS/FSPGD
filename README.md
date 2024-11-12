@@ -9,27 +9,46 @@ Transferability, the ability of adversarial examples crafted for one model to de
 conda create -n fspgd python =3.8
 conda activate fspgd
 pip install -r requirements.txt
+
 ```
 ## 2  Preparation
-### Pascal VOC 2012
+### 2.1 Pretrained model
+we trained models(pspnet-res50, pspnet-res101, deeplabv3-res50, deeplabv3-res101, fcn-vgg16) using the code from this [site](https://github.com/Tramac/awesome-semantic-segmentation-pytorch)
+```
+/pretrained_model
+    /deeplabv3_resnet50_voc.pth
+    /deeplabv3_resnet101_voc.pth
+    /psp_resnet50_voc.pth
+    /psp_resnet101_voc.pth
+```
+### 2.2 Dataset
+####  Pascal VOC 2012
+Download  'training/validation data' file from [Pascal VOC 2012](http://host.robots.ox.ac.uk/pascal/VOC/) and extract it to 'dataset/voc'.
+
 ```
 /dataset
-    /voc 
-        /SegmentationClass
-        /JPEGImages
-        ...
+    /voc
+        /pascal_voc
+            /SegmentationClass
+            /JPEGImages
+            ...
 ```
-### Cityscapes
+Download 'gtFine_trainvaltest.zip' and 'leftImg8bit_trainvaltest.zip' from [Cityscapes](https://www.cityscapes-dataset.com/) 
+and extract it to dataset/citys
+#### Cityscapes
 ```
 /dataset
     /citys 
         /gtFine
         /leftImg8bit
 ```
+
 ## 3. Run
+Generate adversarial examples from the proposed attack method and evaluate transferability.
+
 ```
 cd implementation
-python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrained_data pascal_aug  --cosine 3 --source_model deeplabv3_resnet50 --target_model psp_resnet101
+python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrained_data pascal_aug  --cosine 3 --source_model psp_resnet50 --target_model deeplabv3_resnet101
 ```
 or, you can use bash script [attack.sh](implementation/attack.sh)
 

@@ -47,10 +47,12 @@ def get_args_parser():
                         help='dataset name (default: pascal_voc)')
     parser.add_argument('--pt', type=str, default='./../pretrained_model',
                         help='Path of pretrained model to be adversarially attacked')
+    parser.add_argument('--pretrained', type=bool, default=False, help='you can train models in https://github.com/Tramac/awesome-semantic-segmentation-pytorch')
 # * Dataset parameters
     parser.add_argument('--dataset', type=str, default='pascal_voc',
                         choices=['pascal_voc', 'pascal_aug', 'ade20k', 'citys', 'sbu'],
                         help='dataset name (default: pascal_voc)')
+
     parser.add_argument('--data_root', default='./../datasets/voc', type=str, help='root of dataset to train/eval on')
     parser.add_argument("--download", action='store_true', default=False, help="download datasets")
     parser.add_argument('--crop_size', default=513, type=int, help='crop_size for training')
@@ -66,7 +68,7 @@ def get_args_parser():
     # * Large transposed convolution kernels, plots and FGSM attack    
     parser.add_argument('-it', '--iterations', type=int, default=20,
                         help='number of iterations for adversarial attack')
-    parser.add_argument('-at', '--attack', type=str, default='cospgd', choices={'fspgd'},
+    parser.add_argument('-at', '--attack', type=str, default='fspgd', choices={'fspgd'},
                         help='Which adversarial attack')
     parser.add_argument('-ep', '--epsilon', type=float, default=0.03,
                         help='number of iterations for adversarial attack')
@@ -189,7 +191,7 @@ def main(args):
         model_ = args.model.split('_')
 
     model = get_segmentation_model(model=model_[0], dataset=args.pretrained_data, backbone=model_[1],
-                                    pretrained=True, root=args.pt).to(args.device)
+                                    pretrained=args.pretrained, root=args.pt).to(args.device)
 
     criterion = {"cross_entropy": nn.CrossEntropyLoss(ignore_index=255, reduction="none"), "dice_loss": DiceLoss(reduction=None)}
     metrics = StreamSegMetrics(val_dataset.num_class)
