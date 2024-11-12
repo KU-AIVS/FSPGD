@@ -14,6 +14,7 @@ pip install -r requirements.txt
 ## 2  Preparation
 ### 2.1 Pretrained model
 we trained models(pspnet-res50, pspnet-res101, deeplabv3-res50, deeplabv3-res101, fcn-vgg16) using the code from this [site](https://github.com/Tramac/awesome-semantic-segmentation-pytorch)
+If the trained models, move the model file to the 'pretrained_model' folder 
 ```
 /pretrained_model
     /deeplabv3_resnet50_voc.pth
@@ -50,8 +51,8 @@ Generate adversarial examples from the proposed attack method and evaluate trans
 
 ```
 cd implementation
-python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrained_data pascal_aug --pretrained True  --cosine 3 --source_model psp_resnet50 --target_model deeplabv3_resnet101
-# if you have pretrained model, you can change '--pretrrained' True
+python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrained_data pascal_aug --pretrained False  --cosine 3 --source_model psp_resnet50 --target_model deeplabv3_resnet101
+# if you have pretrained model, you can change '--pretrained' True
 ```
 or, you can use bash script [attack.sh](implementation/attack.sh)
 
