@@ -1,5 +1,8 @@
 # FSPGD
 
+
+![visual_similairty](https://github.com/user-attachments/assets/30589627-5d48-4b54-afc4-7397f312be18)
+
 ## Abstract
 Transferability, the ability of adversarial examples crafted for one model to deceive other models, is crucial for black-box attacks. Despite advancements in attack methods for semantic segmentation, transferability remains limited, reducing their effectiveness in real-world applications. To address this, we introduce the Feature Similarity Projected Gradient Descent (FSPGD) attack, a novel black-box approach that enhances both attack performance and transferability. Unlike conventional segmentation attacks that rely on output predictions for gradient calculation, FSPGD computes gradients from intermediate layer features. Specifically, our method introduces a loss function that targets local information by comparing features between clean and attacked images, while also disrupting contextual information through spatial relationships. Experiments on the Pascal VOC 2012 and Cityscapes datasets demonstrate that FSPGD achieves superior transferability and attack performance, establishing a new state-of-the-art benchmark.
 ## Implementing
