@@ -68,7 +68,7 @@ python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrai
 ```
 or, you can use bash script [attack.sh](implementation/attack.sh)
 
-<img src="https://github.com/user-attachments/assets/7a07c09a-e636-47f1-aaf2-e0f00e200176"  width="500"/>
+<img src="https://github.com/user-attachments/assets/24979431-f0c4-4831-b88a-600f601f002d"/>
 
 ### Partial code are from
 
