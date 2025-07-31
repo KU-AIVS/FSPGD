@@ -1,11 +1,7 @@
 # FSPGD
 
 
-<img src="https://github.com/user-attachments/assets/30589627-5d48-4b54-afc4-7397f312be18"  width="800"/>
-
-
-
-
+<img src=""  width="800"/>
 
 
 ## Abstract
@@ -56,7 +52,7 @@ and extract it to dataset/citys
 ```
 
 ## 3. Run
-<img src="https://github.com/user-attachments/assets/a8a75169-6a7e-4dc2-be2a-84add7903bbd"  width="800"/>
+<img src="https://github.com/user-attachments/assets/6a4951cd-56a1-4d34-8f9f-80db03369063"  width="800"/>
 
 
 Generate adversarial examples from the proposed attack method and evaluate transferability.
