@@ -11,7 +11,7 @@ Transferability, the ability of adversarial examples crafted for one model to de
 ## 1. Installation
 
 ```
-conda create -n fspgd python =3.8
+conda create -n fspgd python =3.9
 conda activate fspgd
 pip install -r requirements.txt
 
