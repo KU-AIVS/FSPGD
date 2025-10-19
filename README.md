@@ -64,12 +64,14 @@ python attack.py --attack fspgd --mode adv_attack --dataset pascal_voc --pretrai
 ```
 or, you can use bash script [attack.sh](implementation/attack.sh)
 
-<img src="https://github.com/user-attachments/assets/3996f630-7eeb-4607-8094-4071793c4bb1"/>
+<img src="https://github.com/user-attachments/assets/91454d97-da3d-49ec-8868-4b431d6b93a1" />
+<img src="https://github.com/user-attachments/assets/0890006e-cc80-471c-8237-778e9bd08bd8" />
 
 ### Partial code are from
 
 [1] [CosPGD](https://github.com/shashankskagnihotri/cospgd) 
 
 [2] [Semantic Segmentation on Pytorch](https://github.com/Tramac/awesome-semantic-segmentation-pytorch)
+
 
 
